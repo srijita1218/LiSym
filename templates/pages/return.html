@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LiSym | Return Book</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        .table-card {
+            background: white;
+            border: 1px solid #e3dfdc;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 8px;
+            letter-spacing: 1px;
+            color: #858087;
+            background: #f4f1ee;
+            border-bottom: 1px solid #e5e1de;
+        }
+
+        td {
+            padding: 15px 16px;
+            font-size: 10px;
+            color: #5d575e;
+            border-bottom: 1px solid #eeeae7;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .member-name,
+        .book-title {
+            font-weight: 600;
+            color: #504a51;
+        }
+
+        .secondary {
+            margin-top: 3px;
+            font-size: 8px;
+            color: #999299;
+        }
+
+        .return-button {
+            border: none;
+            padding: 7px 11px;
+            border-radius: 6px;
+            background: #766979;
+            color: white;
+            font-family: inherit;
+            font-size: 8px;
+            cursor: pointer;
+        }
+
+        .return-button:hover {
+            background: #665a69;
+        }
+
+        .overdue {
+            color: #8a6269;
+            font-weight: 600;
+        }
+
+        .on-time {
+            color: #69796d;
+        }
+
+        .empty-state {
+            padding: 45px;
+            text-align: center;
+            color: #999299;
+            font-size: 11px;
+        }
+
+        .flash {
+            margin-bottom: 18px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+
+        .flash-success {
+            background: #e2e9df;
+            color: #607263;
+        }
+
+        .flash-error {
+            background: #ebdfe1;
+            color: #796068;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                L
+            </div>
+
+            <div>
+                <h2>LiSym</h2>
+                <p>Library Management System</p>
+            </div>
+
+        </div>
+
+
+        <div class="menu-label">
+            MAIN MENU
+        </div>
+
+
+        <nav>
+
+            <a href="/" class="nav-link">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/books" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>Books</span>
+            </a>
+
+            <a href="/members" class="nav-link">
+                <span class="nav-icon">○</span>
+                <span>Members</span>
+            </a>
+
+            <a href="/issue" class="nav-link">
+                <span class="nav-icon">→</span>
+                <span>Issue Book</span>
+            </a>
+
+            <a href="/return" class="nav-link active">
+                <span class="nav-icon">←</span>
+                <span>Return Book</span>
+            </a>
+
+            <a href="/fines" class="nav-link">
+                <span class="nav-icon">₹</span>
+                <span>Fines</span>
+            </a>
+
+            <a href="/reservations" class="nav-link">
+                <span class="nav-icon">◇</span>
+                <span>Reservations</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <p>Database connected</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="section-label">
+                    CIRCULATION
+                </p>
+
+                <h1>
+                    Return Book
+                </h1>
+
+                <p class="subtitle">
+                    Process active loans and identify overdue returns.
+                </p>
+
+            </div>
+
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>Library Staff</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash flash-{{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <div class="table-card">
+
+            {% if active_loans %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>MEMBER</th>
+                        <th>BOOK</th>
+                        <th>ACCESSION</th>
+                        <th>ISSUED</th>
+                        <th>DUE DATE</th>
+                        <th>STATUS</th>
+                        <th>ACTION</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for loan in active_loans %}
+
+                    <tr>
+
+                        <td>
+
+                            <div class="member-name">
+                                {{ loan.full_name }}
+                            </div>
+
+                            <div class="secondary">
+                                Loan #{{ loan.loan_id }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            <div class="book-title">
+                                {{ loan.title }}
+                            </div>
+                        </td>
+
+
+                        <td>
+                            {{ loan.accession_number }}
+                        </td>
+
+
+                        <td>
+                            {{ loan.issue_date }}
+                        </td>
+
+
+                        <td>
+                            {{ loan.due_date }}
+                        </td>
+
+
+                        <td>
+
+                            {% if loan.days_overdue > 0 %}
+
+                            <span class="overdue">
+                                {{ loan.days_overdue }} days overdue
+                            </span>
+
+                            {% else %}
+
+                            <span class="on-time">
+                                On time
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <form method="POST">
+
+                                <input
+                                    type="hidden"
+                                    name="loan_id"
+                                    value="{{ loan.loan_id }}">
+
+                                <button
+                                    type="submit"
+                                    class="return-button">
+
+                                    Return
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty-state">
+                There are currently no active loans.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LiSym | Members</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        .table-card {
+            background: white;
+            border: 1px solid #e3dfdc;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 8px;
+            letter-spacing: 1px;
+            color: #858087;
+            background: #f4f1ee;
+            border-bottom: 1px solid #e5e1de;
+        }
+
+        td {
+            padding: 15px 16px;
+            font-size: 10px;
+            color: #5d575e;
+            border-bottom: 1px solid #eeeae7;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #faf8f6;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: #504a51;
+        }
+
+        .member-id {
+            margin-top: 3px;
+            font-size: 8px;
+            color: #999299;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            font-size: 8px;
+            font-weight: 600;
+        }
+
+        .active-status {
+            background: #e2e9df;
+            color: #607263;
+        }
+
+        .inactive-status {
+            background: #ebdfe1;
+            color: #796068;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                L
+            </div>
+
+            <div>
+                <h2>LiSym</h2>
+                <p>Library Management System</p>
+            </div>
+
+        </div>
+
+
+        <div class="menu-label">
+            MAIN MENU
+        </div>
+
+
+        <nav>
+
+            <a href="/" class="nav-link">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/books" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>Books</span>
+            </a>
+
+            <a href="/members" class="nav-link active">
+                <span class="nav-icon">○</span>
+                <span>Members</span>
+            </a>
+
+            <a href="/issue" class="nav-link">
+                <span class="nav-icon">→</span>
+                <span>Issue Book</span>
+            </a>
+
+            <a href="/return" class="nav-link">
+                <span class="nav-icon">←</span>
+                <span>Return Book</span>
+            </a>
+
+            <a href="/fines" class="nav-link">
+                <span class="nav-icon">₹</span>
+                <span>Fines</span>
+            </a>
+
+            <a href="/reservations" class="nav-link">
+                <span class="nav-icon">◇</span>
+                <span>Reservations</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <p>Database connected</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="section-label">
+                    MEMBERSHIP
+                </p>
+
+                <h1>
+                    Members
+                </h1>
+
+                <p class="subtitle">
+                    View registered members and their borrowing activity.
+                </p>
+
+            </div>
+
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>Library Staff</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>MEMBER</th>
+                        <th>EMAIL</th>
+                        <th>PHONE</th>
+                        <th>MEMBERSHIP DATE</th>
+                        <th>LOANS</th>
+                        <th>STATUS</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for member in members %}
+
+                    <tr>
+
+                        <td>
+
+                            <div class="member-name">
+                                {{ member.full_name }}
+                            </div>
+
+                            <div class="member-id">
+                                Member #{{ member.member_id }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ member.email }}
+                        </td>
+
+
+                        <td>
+                            {{ member.phone or "—" }}
+                        </td>
+
+
+                        <td>
+                            {{ member.membership_date }}
+                        </td>
+
+
+                        <td>
+                            {{ member.total_loans }}
+                        </td>
+
+
+                        <td>
+
+                            {% if member.membership_status == "ACTIVE" %}
+
+                            <span class="status active-status">
+                                ACTIVE
+                            </span>
+
+                            {% else %}
+
+                            <span class="status inactive-status">
+                                {{ member.membership_status }}
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

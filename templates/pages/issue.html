@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LiSym | Issue Book</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        .form-card {
+            max-width: 700px;
+            background: white;
+            border: 1px solid #e3dfdc;
+            border-radius: 14px;
+            padding: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            color: #777178;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd8d5;
+            border-radius: 8px;
+            background: #faf9f7;
+            color: #5c565d;
+            font-family: inherit;
+            font-size: 10px;
+            outline: none;
+        }
+
+        .form-group select:focus {
+            border-color: #a995a4;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #766979;
+            color: white;
+            font-family: inherit;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .submit-button:hover {
+            background: #665a69;
+        }
+
+        .flash {
+            margin-bottom: 18px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 10px;
+        }
+
+        .flash-success {
+            background: #e2e9df;
+            color: #607263;
+        }
+
+        .flash-error {
+            background: #ebdfe1;
+            color: #796068;
+        }
+
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 9px;
+            background: #f3efed;
+            color: #817980;
+            font-size: 9px;
+            line-height: 1.6;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-mark">L</div>
+
+            <div>
+                <h2>LiSym</h2>
+                <p>Library Management System</p>
+            </div>
+        </div>
+
+
+        <div class="menu-label">
+            MAIN MENU
+        </div>
+
+
+        <nav>
+
+            <a href="/" class="nav-link">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/books" class="nav-link">
+                <span class="nav-icon">▤</span>
+                <span>Books</span>
+            </a>
+
+            <a href="/members" class="nav-link">
+                <span class="nav-icon">○</span>
+                <span>Members</span>
+            </a>
+
+            <a href="/issue" class="nav-link active">
+                <span class="nav-icon">→</span>
+                <span>Issue Book</span>
+            </a>
+
+            <a href="/return" class="nav-link">
+                <span class="nav-icon">←</span>
+                <span>Return Book</span>
+            </a>
+
+            <a href="/fines" class="nav-link">
+                <span class="nav-icon">₹</span>
+                <span>Fines</span>
+            </a>
+
+            <a href="/reservations" class="nav-link">
+                <span class="nav-icon">◇</span>
+                <span>Reservations</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <p>Database connected</p>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="section-label">
+                    CIRCULATION
+                </p>
+
+                <h1>
+                    Issue Book
+                </h1>
+
+                <p class="subtitle">
+                    Issue an available physical copy to an active member.
+                </p>
+
+            </div>
+
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>Library Staff</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div class="flash flash-{{ category }}">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <div class="form-card">
+
+            <form method="POST">
+
+                <div class="form-group">
+
+                    <label>
+                        MEMBER
+                    </label>
+
+                    <select name="member_id" required>
+
+                        <option value="">
+                            Select a member
+                        </option>
+
+                        {% for member in members %}
+
+                        <option value="{{ member.member_id }}">
+                            {{ member.full_name }} — {{ member.email }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        AVAILABLE BOOK COPY
+                    </label>
+
+                    <select name="copy_id" required>
+
+                        <option value="">
+                            Select a book copy
+                        </option>
+
+                        {% for copy in available_copies %}
+
+                        <option value="{{ copy.copy_id }}">
+                            {{ copy.title }} — {{ copy.accession_number }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-button">
+
+                    Issue Book
+
+                </button>
+
+            </form>
+
+
+            <div class="info-box">
+
+                The system automatically records the issue date and
+                calculates a 14-day due date. The selected physical
+                copy is also marked as <strong>ISSUED</strong>.
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

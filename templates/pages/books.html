@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>LiSym | Books</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-box input {
+            width: 260px;
+            padding: 11px 14px;
+            border: 1px solid #ddd8d5;
+            border-radius: 8px;
+            background: white;
+            font-family: inherit;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #a995a4;
+        }
+
+        .search-button {
+            border: none;
+            border-radius: 8px;
+            padding: 0 17px;
+            background: #766979;
+            color: white;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .table-card {
+            background: white;
+            border: 1px solid #e3dfdc;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 8px;
+            letter-spacing: 1px;
+            color: #858087;
+            background: #f4f1ee;
+            border-bottom: 1px solid #e5e1de;
+        }
+
+        td {
+            padding: 15px 16px;
+            font-size: 10px;
+            color: #5d575e;
+            border-bottom: 1px solid #eeeae7;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #faf8f6;
+        }
+
+        .book-title {
+            font-weight: 600;
+            color: #504a51;
+        }
+
+        .isbn {
+            font-size: 9px;
+            color: #999299;
+            margin-top: 3px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 8px;
+            border-radius: 6px;
+            font-size: 8px;
+            font-weight: 600;
+        }
+
+        .available {
+            background: #e2e9df;
+            color: #607263;
+        }
+
+        .unavailable {
+            background: #ebdfe1;
+            color: #796068;
+        }
+
+        .empty-state {
+            padding: 45px;
+            text-align: center;
+            color: #999299;
+            font-size: 11px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-mark">
+                L
+            </div>
+
+            <div>
+                <h2>LiSym</h2>
+                <p>Library Management System</p>
+            </div>
+
+        </div>
+
+
+        <div class="menu-label">
+            MAIN MENU
+        </div>
+
+
+        <nav>
+
+            <a href="/" class="nav-link">
+                <span class="nav-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/books" class="nav-link active">
+                <span class="nav-icon">▤</span>
+                <span>Books</span>
+            </a>
+
+            <a href="/members" class="nav-link">
+                <span class="nav-icon">○</span>
+                <span>Members</span>
+            </a>
+
+            <a href="/issue" class="nav-link">
+                <span class="nav-icon">→</span>
+                <span>Issue Book</span>
+            </a>
+
+            <a href="/return" class="nav-link">
+                <span class="nav-icon">←</span>
+                <span>Return Book</span>
+            </a>
+
+            <a href="/fines" class="nav-link">
+                <span class="nav-icon">₹</span>
+                <span>Fines</span>
+            </a>
+
+            <a href="/reservations" class="nav-link">
+                <span class="nav-icon">◇</span>
+                <span>Reservations</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-footer">
+
+            <div class="system-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Online</strong>
+                    <p>Database connected</p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="section-label">
+                    COLLECTION
+                </p>
+
+                <h1>
+                    Books
+                </h1>
+
+                <p class="subtitle">
+                    Browse the library collection and monitor copy availability.
+                </p>
+
+            </div>
+
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>Library Staff</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <div class="page-header">
+
+            <div>
+                <p class="section-label">
+                    CATALOGUE
+                </p>
+            </div>
+
+
+            <form method="GET"
+                  action="/books"
+                  class="search-box">
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search title, ISBN, author...">
+
+                <button
+                    type="submit"
+                    class="search-button">
+                    Search
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <div class="table-card">
+
+            {% if books %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>BOOK</th>
+                        <th>AUTHOR</th>
+                        <th>CATEGORY</th>
+                        <th>PUBLISHER</th>
+                        <th>YEAR</th>
+                        <th>COPIES</th>
+                        <th>AVAILABILITY</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for book in books %}
+
+                    <tr>
+
+                        <td>
+
+                            <div class="book-title">
+                                {{ book.title }}
+                            </div>
+
+                            <div class="isbn">
+                                ISBN {{ book.isbn }}
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            {{ book.authors or "—" }}
+                        </td>
+
+
+                        <td>
+                            {{ book.category_name or "—" }}
+                        </td>
+
+
+                        <td>
+                            {{ book.publisher_name or "—" }}
+                        </td>
+
+
+                        <td>
+                            {{ book.publication_year or "—" }}
+                        </td>
+
+
+                        <td>
+                            {{ book.total_copies }}
+                        </td>
+
+
+                        <td>
+
+                            {% if book.available_copies > 0 %}
+
+                            <span class="badge available">
+                                {{ book.available_copies }} Available
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge unavailable">
+                                All Issued
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="empty-state">
+                No books found.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

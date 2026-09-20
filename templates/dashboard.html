@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>LiSym | Library Management System</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+```
+
+</head>
+
+<body>
+
+<div class="app">
+
+```
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-mark">L</div>
+
+        <div>
+            <h2>LiSym</h2>
+            <p>Library Management System</p>
+        </div>
+    </div>
+
+    <div class="menu-label">MAIN MENU</div>
+
+    <nav>
+
+        <a href="/" class="nav-link active">
+            <span class="nav-icon">⌂</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="#" class="nav-link">
+            <span class="nav-icon">▤</span>
+            <span>Books</span>
+        </a>
+
+        <a href="#" class="nav-link">
+            <span class="nav-icon">○</span>
+            <span>Members</span>
+        </a>
+
+        <a href="#" class="nav-link">
+            <span class="nav-icon">→</span>
+            <span>Issue Book</span>
+        </a>
+
+        <a href="#" class="nav-link">
+            <span class="nav-icon">←</span>
+            <span>Return Book</span>
+        </a>
+
+        <a href="#" class="nav-link">
+            <span class="nav-icon">₹</span>
+            <span>Fines</span>
+        </a>
+
+        <a href="#" class="nav-link">
+            <span class="nav-icon">◇</span>
+            <span>Reservations</span>
+        </a>
+
+    </nav>
+
+    <div class="sidebar-footer">
+
+        <div class="system-status">
+            <span class="status-dot"></span>
+
+            <div>
+                <strong>System Online</strong>
+                <p>Database connected</p>
+            </div>
+        </div>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+    <!-- HEADER -->
+    <header class="topbar">
+
+        <div>
+            <p class="section-label">LIBRARY OVERVIEW</p>
+
+            <h1>Dashboard</h1>
+
+            <p class="subtitle">
+                Monitor your library's collection, members and circulation activity.
+            </p>
+        </div>
+
+        <div class="profile">
+
+            <div class="profile-avatar">
+                A
+            </div>
+
+            <div>
+                <strong>Administrator</strong>
+                <span>Library Staff</span>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- STATISTICS -->
+    <section class="stats-grid">
+
+        <div class="stat-card lavender">
+            <div class="stat-header">
+                <span class="stat-icon">▤</span>
+                <span class="stat-title">BOOKS</span>
+            </div>
+
+            <h2>{{ total_books }}</h2>
+            <p>Total titles in collection</p>
+        </div>
+
+
+        <div class="stat-card blue">
+            <div class="stat-header">
+                <span class="stat-icon">▥</span>
+                <span class="stat-title">COPIES</span>
+            </div>
+
+            <h2>{{ total_copies }}</h2>
+            <p>Physical copies available</p>
+        </div>
+
+
+        <div class="stat-card sage">
+            <div class="stat-header">
+                <span class="stat-icon">✓</span>
+                <span class="stat-title">AVAILABLE</span>
+            </div>
+
+            <h2>{{ available_copies }}</h2>
+            <p>Copies ready to issue</p>
+        </div>
+
+
+        <div class="stat-card rose">
+            <div class="stat-header">
+                <span class="stat-icon">→</span>
+                <span class="stat-title">ISSUED</span>
+            </div>
+
+            <h2>{{ issued_copies }}</h2>
+            <p>Currently on loan</p>
+        </div>
+
+
+        <div class="stat-card sand">
+            <div class="stat-header">
+                <span class="stat-icon">○</span>
+                <span class="stat-title">MEMBERS</span>
+            </div>
+
+            <h2>{{ total_members }}</h2>
+            <p>Registered members</p>
+        </div>
+
+
+        <div class="stat-card slate">
+            <div class="stat-header">
+                <span class="stat-icon">◷</span>
+                <span class="stat-title">ACTIVE LOANS</span>
+            </div>
+
+            <h2>{{ active_loans }}</h2>
+            <p>Currently active loans</p>
+        </div>
+
+
+        <div class="stat-card mauve">
+            <div class="stat-header">
+                <span class="stat-icon">₹</span>
+                <span class="stat-title">UNPAID FINES</span>
+            </div>
+
+            <h2>₹{{ unpaid_fines }}</h2>
+            <p>Pending fine collection</p>
+        </div>
+
+    </section>
+
+
+    <!-- OVERVIEW PANEL -->
+    <section class="overview-card">
+
+        <div class="overview-content">
+
+            <p class="section-label">LIBRARY MANAGEMENT</p>
+
+            <h2>
+                Manage your library<br>
+                from one place.
+            </h2>
+
+            <p>
+                Access your books, members, loans, returns,
+                fines and reservations through a centralized system.
+            </p>
+
+            <button class="primary-button">
+                View Collection
+            </button>
+
+        </div>
+
+
+        <div class="overview-visual">
+
+            <div class="visual-circle large"></div>
+            <div class="visual-circle small"></div>
+
+            <div class="library-symbol">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+    <section class="quick-section">
+
+        <div class="section-heading">
+
+            <div>
+                <p class="section-label">OPERATIONS</p>
+                <h2>Quick Actions</h2>
+            </div>
+
+        </div>
+
+
+        <div class="actions-grid">
+
+            <button class="action-card">
+
+                <div class="action-icon lavender-bg">
+                    ▤
+                </div>
+
+                <div class="action-text">
+                    <strong>Manage Books</strong>
+                    <p>Browse and manage the collection</p>
+                </div>
+
+                <span class="action-arrow">→</span>
+
+            </button>
+
+
+            <button class="action-card">
+
+                <div class="action-icon blue-bg">
+                    ○
+                </div>
+
+                <div class="action-text">
+                    <strong>Manage Members</strong>
+                    <p>View and manage library members</p>
+                </div>
+
+                <span class="action-arrow">→</span>
+
+            </button>
+
+
+            <button class="action-card">
+
+                <div class="action-icon sage-bg">
+                    →
+                </div>
+
+                <div class="action-text">
+                    <strong>Issue a Book</strong>
+                    <p>Create a new library loan</p>
+                </div>
+
+                <span class="action-arrow">→</span>
+
+            </button>
+
+
+            <button class="action-card">
+
+                <div class="action-icon rose-bg">
+                    ←
+                </div>
+
+                <div class="action-text">
+                    <strong>Return a Book</strong>
+                    <p>Process a returned book</p>
+                </div>
+
+                <span class="action-arrow">→</span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+```
+
+</div>
+
+</body>
+</html>
