@@ -35,43 +35,62 @@
     <div class="menu-label">MAIN MENU</div>
 
     <nav>
-
-        <a href="/" class="nav-link active">
+        <a href="{{ url_for('dashboard') }}" class="nav-link">
             <span class="nav-icon">⌂</span>
             <span>Dashboard</span>
         </a>
 
-        <a href="#" class="nav-link">
+        <a href="{{ url_for('books') }}" class="nav-link">
             <span class="nav-icon">▤</span>
             <span>Books</span>
         </a>
 
-        <a href="#" class="nav-link">
+        {% if session.get('role') in ['ADMIN', 'LIBRARIAN'] %}
+        <a href="{{ url_for('members') }}" class="nav-link">
             <span class="nav-icon">○</span>
             <span>Members</span>
         </a>
 
-        <a href="#" class="nav-link">
+        <a href="{{ url_for('issue_book') }}" class="nav-link">
             <span class="nav-icon">→</span>
             <span>Issue Book</span>
         </a>
 
-        <a href="#" class="nav-link">
+        <a href="{{ url_for('return_book') }}" class="nav-link">
             <span class="nav-icon">←</span>
             <span>Return Book</span>
         </a>
 
-        <a href="#" class="nav-link">
+        <a href="{{ url_for('fines') }}" class="nav-link">
             <span class="nav-icon">₹</span>
             <span>Fines</span>
         </a>
 
-        <a href="#" class="nav-link">
+        <a href="{{ url_for('reservations') }}" class="nav-link">
             <span class="nav-icon">◇</span>
             <span>Reservations</span>
         </a>
+        {% endif %}
+        
+        {% if session.get('role') == 'MEMBER' %}
+        <a href="/my-borrowing" class="nav-link">
+            <span class="nav-icon">↔</span>
+            <span>My Borrowing History</span>
+        </a>
+
+        <a href="/my-reservations" class="nav-link">
+            <span class="nav-icon">◇</span>
+            <span>My Reservations</span>
+        </a>
+
+        <a href="/my-fines" class="nav-link">
+            <span class="nav-icon">₹</span>
+            <span>My Fines</span>
+        </a>
+        {% endif %}
 
     </nav>
+
 
     <div class="sidebar-footer">
 
@@ -105,18 +124,30 @@
             </p>
         </div>
 
+        
         <div class="profile">
-
             <div class="profile-avatar">
-                A
+                {{ session.get('username', 'U')[0]|upper }}
             </div>
 
-            <div>
-                <strong>Administrator</strong>
-                <span>Library Staff</span>
+            <div class="profile-details">
+                <strong>{{ session.get('username', 'User') }}</strong>
+                <span>
+                    {% if session.get('role') == 'ADMIN' %}
+                        Administrator
+                    {% elif session.get('role') == 'LIBRARIAN' %}
+                        Library Staff
+                    {% else %}
+                        Library Member
+                    {% endif %}
+                </span>
             </div>
-
+            <form action="{{ url_for('logout') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit">Log Out</button>
+            </form>
         </div>
+
 
     </header>
 

@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Fines | LiSym</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1>My Fines</h1>
+        <p>View fines associated with your borrowed books.</p>
+        <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fine ID</th>
+                    <th>Book</th>
+                    <th>Loan ID</th>
+                    <th>Amount</th>
+                    <th>Payment Status</th>
+                    <th>Generated Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in fines %}
+                <tr>
+                    <td>{{ item.fine_id }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.loan_id }}</td>
+                    <td>₹{{ item.amount }}</td>
+                    <td>{{ item.paid_status }}</td>
+                    <td>{{ item.generated_date or '-' }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">You have no fines recorded.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

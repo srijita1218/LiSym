@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Borrowing History | LiSym</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1>My Borrowing History</h1>
+        <p>View the books you have borrowed.</p>
+        <a href="{{ url_for('dashboard') }}">← Back to Dashboard</a>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Accession No.</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in borrowing_history %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.accession_number }}</td>
+                    <td>{{ item.issue_date or '-' }}</td>
+                    <td>{{ item.due_date or '-' }}</td>
+                    <td>{{ item.return_date or 'Not returned' }}</td>
+                    <td>
+                        {% if item.return_date %}
+                            Returned
+                        {% else %}
+                            Currently borrowed
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6">You have no borrowing history yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

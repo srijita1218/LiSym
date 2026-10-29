@@ -164,10 +164,12 @@
                 <span>Dashboard</span>
             </a>
 
-            <a href="/books" class="nav-link active">
+            
+            <a href="{{ url_for('books') }}" class="nav-link active">
                 <span class="nav-icon">▤</span>
                 <span>Books</span>
             </a>
+
 
             <a href="/members" class="nav-link">
                 <span class="nav-icon">○</span>
@@ -238,18 +240,31 @@
             </div>
 
 
-            <div class="profile">
-
-                <div class="profile-avatar">
-                    A
-                </div>
-
-                <div>
-                    <strong>Administrator</strong>
-                    <span>Library Staff</span>
-                </div>
-
+            
+        <div class="profile">
+            <div class="profile-avatar">
+                {{ session.get('username', 'U')[0]|upper }}
             </div>
+
+            <div class="profile-details">
+                <strong>{{ session.get('username', 'User') }}</strong>
+                <span>
+                    {% if session.get('role') == 'ADMIN' %}
+                        Administrator
+                    {% elif session.get('role') == 'LIBRARIAN' %}
+                        Library Staff
+                    {% else %}
+                        Library Member
+                    {% endif %}
+                </span>
+            </div>
+
+            <form action="{{ url_for('logout') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit">Log Out</button>
+            </form>
+        </div>
+
 
         </header>
 

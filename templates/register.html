@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiSym | Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 440px;
+            padding: 32px;
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 8px 30px rgba(0,0,0,.08);
+        }
+        .auth-card h1 { margin-bottom: 8px; }
+        .auth-card p { color: #666; margin-bottom: 24px; }
+        .auth-card label { display: block; margin: 16px 0 6px; }
+        .auth-card input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .auth-card button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 22px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #263b80;
+            color: white;
+        }
+        .auth-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            background: #f3f4f6;
+        }
+        .field-errors { color: #b91c1c; font-size: .9rem; }
+    </style>
+</head>
+<body>
+    <main class="auth-wrapper">
+        <section class="auth-card">
+            <h1>Create your account</h1>
+            <p>Use the email address associated with your library membership.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="auth-message">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('register') }}">
+                {{ form.hidden_tag() }}
+
+                <label for="email">Library email</label>
+                {{ form.email(id="email", autocomplete="email", required=true) }}
+
+                <label for="username">Choose a username</label>
+                {{ form.username(id="username", autocomplete="username", required=true) }}
+
+                <label for="password">Password (at least 8 characters)</label>
+                {{ form.password(id="password", autocomplete="new-password", required=true) }}
+
+                <label for="confirm_password">Confirm password</label>
+                {{ form.confirm_password(id="confirm_password", autocomplete="new-password", required=true) }}
+
+                <button type="submit">Create account</button>
+            </form>
+
+            <p style="margin-top:20px; margin-bottom:0;">
+                Already registered?
+                <a href="{{ url_for('login') }}">Log in</a>
+            </p>
+        </section>
+    </main>
+</body>
+</html>

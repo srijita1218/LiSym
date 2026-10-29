@@ -198,18 +198,31 @@
             </div>
 
 
+            
             <div class="profile">
-
                 <div class="profile-avatar">
-                    A
+                    {{ session.get('username', 'U')[0]|upper }}
                 </div>
 
-                <div>
-                    <strong>Administrator</strong>
-                    <span>Library Staff</span>
+                <div class="profile-details">
+                    <strong>{{ session.get('username', 'User') }}</strong>
+                    <span>
+                        {% if session.get('role') == 'ADMIN' %}
+                            Administrator
+                        {% elif session.get('role') == 'LIBRARIAN' %}
+                            Library Staff
+                        {% else %}
+                            Library Member
+                        {% endif %}
+                    </span>
                 </div>
 
+                <form action="{{ url_for('logout') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit">Log Out</button>
+                </form>
             </div>
+
 
         </header>
 

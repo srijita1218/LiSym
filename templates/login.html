@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiSym | Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            padding: 32px;
+            border-radius: 16px;
+            background: white;
+            box-shadow: 0 8px 30px rgba(0,0,0,.08);
+        }
+        .auth-card h1 { margin-bottom: 8px; }
+        .auth-card p { color: #666; margin-bottom: 24px; }
+        .auth-card label { display: block; margin: 16px 0 6px; }
+        .auth-card input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .auth-card button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 22px;
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #263b80;
+            color: white;
+        }
+        .auth-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 6px;
+            background: #f3f4f6;
+        }
+    </style>
+</head>
+<body>
+    <main class="auth-wrapper">
+        <section class="auth-card">
+            <h1>Welcome to LiSym</h1>
+            <p>Sign in to your library account.</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="auth-message">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                {{ form.hidden_tag() }}
+
+                <label for="username">Username</label>
+                {{ form.username(id="username", autocomplete="username", required=true) }}
+
+                <label for="password">Password</label>
+                {{ form.password(id="password", autocomplete="current-password", required=true) }}
+
+                <button type="submit">Log in</button>
+            </form>
+
+            <p style="margin-top:20px; margin-bottom:0;">
+                Don't have an account?
+                <a href="{{ url_for('register') }}">Register here</a>
+            </p>
+        </section>
+    </main>
+</body>
+</html>
